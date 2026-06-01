@@ -29,7 +29,7 @@ Proyek ini mendokumentasikan proses deployment aplikasi web (Node.js + Nginx) ke
 ## 🚀 Local Development & Testing
 1. **Clone repository**
    ```bash
-   git clone https://github.com/username/repo.git
+   git clone https://github.com/codebucks27/wibe-studio.git
    cd repo
    ```
 2. **Build & Run Docker container**
@@ -189,17 +189,3 @@ Buat file `.github/workflows/deploy.yml`. Pipeline akan menjalankan:
 - 🔑 `SSH_PRIVATE_KEY` di GitHub Secrets harus berisi seluruh isi file `.pem` (termasuk `-----BEGIN...` dan `-----END...`).
 
 ---
-
-## 📜 Lisensi
-Proyek ini dibuat untuk keperluan edukasi & final project. Silakan fork, modifikasi, dan kembangkan sesuai kebutuhan.  
-Dibuat dengan ❤️ menggunakan AWS, Docker, GitHub Actions & Open Source Tools.
-```
-
-### 💾 Cara Menyimpan sebagai File `README.md`:
-1. **Blok & Salin** seluruh teks di dalam kotak kode di atas.
-2. Buka **Notepad** (Windows), **TextEdit** (Mac), atau **VS Code**.
-3. **Paste** kode tersebut.
-4. Simpan file dengan nama: `README.md` (pastikan tipe file diatur ke `All Files` agar tidak tersimpan sebagai `.txt`).
-5. Letakkan file tersebut di **root folder repository** Anda sebelum push ke GitHub.
-
-Jika Anda ingin saya generate juga file `Dockerfile`, `deploy.yml`, atau `docker-compose.yml` dalam format siap-copy, beri tahu saja!
