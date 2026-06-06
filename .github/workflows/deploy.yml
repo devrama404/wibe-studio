@@ -55,10 +55,20 @@ jobs:
           script: |
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
 
-            docker stop wibe-studio || true
-            docker rm wibe-studio || true
-
             docker run -d \
               --name wibe-studio \
               -p 8080:80 \
               ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
+
+            sleep 15
+
+            if curl -f http://localhost:8080; then
+              echo "Deployment Success"
+            else
+              echo "Deployment Failed"
+
+              docker stop wibe-studio
+              docker rm wibe-studio
+
+              exit 1
+            fi
