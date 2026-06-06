@@ -62,7 +62,7 @@ jobs:
 
             sleep 15
 
-            if curl -f http://localhost:9999; then
+            if curl -f http://localhost:8080; then
               echo "Deployment Success"
             else
               echo "Deployment Failed"
