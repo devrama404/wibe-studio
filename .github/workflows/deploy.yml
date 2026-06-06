@@ -1,57 +1,66 @@
 name: CI-CD Pipeline
 
 on:
- push:
-   branches:
-     - main
+  push:
+    branches:
+      - main
 
 jobs:
- deploy:
-   runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-   steps:
-     - name: Checkout code
-       uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-     - name: Setup Node
-       uses: actions/setup-node@v4
-       with:
-         node-version: 22
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-     - name: Install dependencies
-       run: npm install --legacy-peer-deps
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
 
-     - name: Build app
-       run: npm run build
+      - name: Build app
+        run: npm run build
 
-     - name: Login Docker Hub
-       uses: docker/login-action@v3
-       with:
-         username: ${{ secrets.DOCKERHUB_USERNAME }}
-         password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-     - name: Build Docker image
-       run: |
-         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest .
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest .
 
-     - name: Push Docker image
-       run: |
-         docker push ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
+      # Tambahan Trivy Scan
+      - name: Scan Docker Image with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest'
+          format: 'table'
+          exit-code: '1'
+          severity: 'HIGH,CRITICAL'
 
-     - name: Deploy to EC2
-       uses: appleboy/ssh-action@v1.0.3
-       with:
-         host: ${{ secrets.EC2_HOST }}
-         username: ${{ secrets.EC2_USER }}
-         key: ${{ secrets.SSH_PRIVATE_KEY }}
-         script: |
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
 
-           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
 
-           docker stop wibe-studio || true
-           docker rm wibe-studio || true
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
 
-           docker run -d \
-             --name wibe-studio \
-             -p 8080:80 \
-             ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
+            docker stop wibe-studio || true
+            docker rm wibe-studio || true
+
+            docker run -d \
+              --name wibe-studio \
+              -p 8080:80 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
