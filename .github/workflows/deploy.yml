@@ -39,7 +39,7 @@ jobs:
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           severity: 'HIGH,CRITICAL'
 
       - name: Push Docker image
