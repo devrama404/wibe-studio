@@ -34,9 +34,8 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest .
 
-      # Tambahan Trivy Scan
       - name: Scan Docker Image with Trivy
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest'
           format: 'table'
@@ -54,7 +53,6 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/wibe-studio:latest
 
             docker stop wibe-studio || true
