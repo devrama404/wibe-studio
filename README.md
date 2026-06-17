@@ -251,8 +251,12 @@ sudo nginx -t && sudo systemctl restart nginx
 sudo certbot --nginx -d wibestudio.devrama.my.id
 
 ```
-
 *Ikuti petunjuk di layar dan pilih opsi **Redirect (2)** untuk memaksakan pengalihan otomatis lalu lintas HTTP ke HTTPS.*
+
+### Link : [wibestudio.devrama.my.id](url)
+![Image description](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/e4fes6jldtzw53j0lujy.png)
+
+
 
 ---
 
